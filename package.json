@@ -1,0 +1,33 @@
+{
+  "name": "simplify-smashing-react-i18n",
+  "version": "1.0.0",
+  "description": "Upgrade and simplify smashing react i18n",
+  "main": "index.js",
+  "scripts": {
+    "build": "NODE_ENV=production webpack -p",
+    "express": "NODE_PATH=src nodemon server.js",
+    "webpack-dev-server": "webpack-dev-server --content-base public --port 8050 --host 0.0.0.0",
+    "start": "concurrently \"npm run webpack-dev-server\" \"npm run express\""
+  },
+  "author": "andyyou",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^3.0.0",
+    "concurrently": "^4.1.1",
+    "nodemon": "^1.19.1",
+    "webpack": "^4.35.0",
+    "webpack-cli": "^3.3.5",
+    "webpack-dev-server": "^3.7.2"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.4.4",
+    "@babel/register": "^7.4.4",
+    "express": "^4.17.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  }
+}
