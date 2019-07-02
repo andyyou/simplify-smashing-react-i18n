@@ -26,7 +26,10 @@
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
     "@babel/register": "^7.4.4",
+    "accept-language": "^3.0.18",
+    "cookie-parser": "^1.4.4",
     "express": "^4.17.1",
+    "js-cookie": "^2.2.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   }
