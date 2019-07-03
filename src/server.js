@@ -3,10 +3,25 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import cookieParser from 'cookie-parser';
 import acceptLanguage from 'accept-language';
+import fs from 'fs';
+import path from 'path';
+import { IntlProvider, addLocaleData } from 'react-intl';
 import App from './components/App';
+import en from 'react-intl/locale-data/en';
+import ru from 'react-intl/locale-data/ru';
+
+addLocaleData([...ru, ...en]);
+
+const messages = {};
+const localeData = {};
+
+['en', 'ru'].forEach((locale) => {
+  localeData[locale] = fs.readFileSync(path.join(__dirname, `../node_modules/react-intl/locale-data/${locale}.js`)).toString();
+  messages[locale] = require(`../public/assets/${locale}.json`);
+})
 
 const assetUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:8050' : '/';
-const renderHTML = componentHTML => `
+const renderHTML = (componentHTML, locale) => `
   <!DOCTYPE html>
   <html>
     <head>
@@ -17,6 +32,9 @@ const renderHTML = componentHTML => `
     <body>
       <div id="root">${componentHTML}</div>
       <script type="application/javascript" src="${assetUrl}/public/assets/bundle.js"></script>
+      <script type="application/javascript">
+        ${localeData[locale]}
+      </script>
     </body>
   </html>
 `;
@@ -28,14 +46,19 @@ const detectLocale = (req) => {
 acceptLanguage.languages(['en', 'ru']);
 const app = express();
 app.use(cookieParser());
+app.use('/public/assets', express.static('public/assets'));
 app.use((req, res) => {
   const locale = detectLocale(req);
-  const componentHTML = ReactDOMServer.renderToString(<App />);
+  const componentHTML = ReactDOMServer.renderToString(
+    <IntlProvider locale={locale} messages={messages[locale]}>
+      <App />
+    </IntlProvider>
+  );
 
   res.cookie('locale', locale, {
     maxAge: (new Date() * 0.001) + (365 * 24 * 3600),
   });
-  return res.end(renderHTML(componentHTML));
+  return res.end(renderHTML(componentHTML, locale));
 });
 
 const PORT = process.env.PORT || 3001;
