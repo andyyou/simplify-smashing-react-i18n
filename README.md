@@ -15,6 +15,9 @@ Do NOT use this as production, this is a demo for study `react-intl`.
 ```bash
 # Start dev
 $ npm start
+# (Optional) if you want to follow article step by step.
+$ git reset d0d971d --hard
+
 
 # Other commands
 ## Start webpack-dev-server for client resources

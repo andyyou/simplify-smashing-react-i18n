@@ -21,7 +21,7 @@ const localeData = {};
 })
 
 const assetUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:8050' : '/';
-const renderHTML = (componentHTML, locale) => `
+const renderHTML = (componentHTML, locale, initialNow) => `
   <!DOCTYPE html>
   <html>
     <head>
@@ -35,6 +35,7 @@ const renderHTML = (componentHTML, locale) => `
       <script type="application/javascript">
         ${localeData[locale]}
       </script>
+      <script type="application/javascript">window.INITIAL_NOW=${JSON.stringify(initialNow)}</script>
     </body>
   </html>
 `;
@@ -49,8 +50,9 @@ app.use(cookieParser());
 app.use('/public/assets', express.static('public/assets'));
 app.use((req, res) => {
   const locale = detectLocale(req);
+  const initialNow = Date.now();
   const componentHTML = ReactDOMServer.renderToString(
-    <IntlProvider locale={locale} messages={messages[locale]}>
+    <IntlProvider locale={locale} messages={messages[locale]} initialNow={initialNow}>
       <App />
     </IntlProvider>
   );
@@ -58,7 +60,7 @@ app.use((req, res) => {
   res.cookie('locale', locale, {
     maxAge: (new Date() * 0.001) + (365 * 24 * 3600),
   });
-  return res.end(renderHTML(componentHTML, locale));
+  return res.end(renderHTML(componentHTML, locale, initialNow));
 });
 
 const PORT = process.env.PORT || 3001;

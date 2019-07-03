@@ -1,5 +1,13 @@
 import React from 'react';
-import { FormattedMessage, intlShape, injectIntl, defineMessages } from 'react-intl';
+import {
+  FormattedDate,
+  FormattedRelative,
+  FormattedNumber,
+  FormattedMessage,
+  intlShape,
+  injectIntl,
+  defineMessages,
+} from 'react-intl';
 import LocaleButton from './LocaleButton';
 
 const messages = defineMessages({
@@ -23,6 +31,10 @@ const App =  (props) => (
     <div>{props.intl.formatMessage(messages.counting, { count: 1 })}</div>
     <div>{props.intl.formatMessage(messages.counting, { count: 2 })}</div>
     <div>{props.intl.formatMessage(messages.counting, { count: 5 })}</div>
+    {Date.now()}
+    <div><FormattedDate value={Date.now()} /></div>
+    <div><FormattedNumber value="1000" currency="USD" currencyDisplay="symbol" style="currency" /></div>
+    <div><FormattedRelative value={Date.now()} /></div>
     <LocaleButton locale={props.intl.locale} />
   </div>
 );

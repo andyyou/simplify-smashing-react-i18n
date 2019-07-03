@@ -16,7 +16,7 @@ fetch(`/public/assets/${locale}.json`)
   .then((localeMessages) => {
     addLocaleData(window.ReactIntlLocaleData[locale]);
     ReactDOM.render(
-      <IntlProvider locale={locale} messages={localeMessages}>
+      <IntlProvider locale={locale} messages={localeMessages} initialNow={parseInt(window.INITIAL_NOW, 10)}>
         <App />
       </IntlProvider>,
       document.getElementById('root'),
